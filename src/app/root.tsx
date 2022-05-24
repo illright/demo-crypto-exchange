@@ -17,7 +17,6 @@ import type { Socket } from "socket.io-client";
 import io from "socket.io-client";
 
 import tailwindStylesheetUrl from "./styles/tailwind.css";
-import { getUser } from "./session.server";
 import { SocketProvider } from "./socket-context";
 
 export const links: LinksFunction = () => {
@@ -29,16 +28,6 @@ export const meta: MetaFunction = () => ({
   title: "Crypto Trading",
   viewport: "width=device-width,initial-scale=1",
 });
-
-type LoaderData = {
-  user: Awaited<ReturnType<typeof getUser>>;
-};
-
-export const loader: LoaderFunction = async ({ request }) => {
-  return json<LoaderData>({
-    user: await getUser(request),
-  });
-};
 
 export default function App() {
   const [socket, setSocket] = useState<Socket>();
