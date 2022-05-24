@@ -5,7 +5,7 @@ import type { Socket } from "socket.io-client";
 interface ProviderProps {
   socket: Socket | undefined;
   children: ReactNode;
-};
+}
 
 const context = createContext<Socket | undefined>(undefined);
 

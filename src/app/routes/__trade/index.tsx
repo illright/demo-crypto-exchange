@@ -99,7 +99,7 @@ function OrderBook({ currencyFromId, currencyToId, data }: OrderBookProps) {
 
 export default function TradeIndex() {
   const [params] = useSearchParams();
-  const data = useLoaderData<OrderSelected[]>()
+  const data = useLoaderData<OrderSelected[]>();
 
   return (
     <>

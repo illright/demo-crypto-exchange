@@ -37,11 +37,11 @@ app.all(
   "*",
   MODE === "production"
     ? createRequestHandler({
-      build: require("./build"),
-      getLoadContext(_req, _res) {
-        return io;
-      }
-    })
+        build: require("./build"),
+        getLoadContext(_req, _res) {
+          return io;
+        },
+      })
     : (req, res, next) => {
         purgeRequireCache();
         const build = require("./build");

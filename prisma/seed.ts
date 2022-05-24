@@ -6,14 +6,14 @@ async function seed() {
   await prisma.currency.deleteMany({});
   await prisma.currency.create({
     data: {
-      id: 'usd',
-      name: 'US Dollar'
+      id: "usd",
+      name: "US Dollar",
     },
   });
   await prisma.currency.create({
     data: {
-      id: 'btc',
-      name: 'Bitcoin'
+      id: "btc",
+      name: "Bitcoin",
     },
   });
   console.log(`Database has been seeded. 🌱`);
