@@ -1,6 +1,12 @@
-import { Form, Outlet, useLoaderData } from "@remix-run/react";
-import type { LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { type FormEvent } from "react";
+import {
+  Form,
+  Outlet,
+  useLoaderData,
+  useSearchParams,
+  useSubmit,
+} from "@remix-run/react";
+import { type LoaderFunction, json } from "@remix-run/node";
 
 export interface Currency {
   id: string;
@@ -15,22 +21,47 @@ export const loader: LoaderFunction = async () => {
 };
 
 export default function TradePage() {
+  const submit = useSubmit();
+
+  function handleChange(event: FormEvent) {
+    submit(event.currentTarget as HTMLFormElement, { replace: true });
+  }
+
   const currencies = useLoaderData<Currency[]>();
+  const [params] = useSearchParams();
+
   return (
     <>
-      <Form>
-        <label htmlFor="input-currency">Which currency would you like to trade?</label>
-        <select id="input-currency">
+      <Form method="get" onChange={handleChange}>
+        <label htmlFor="input-currency">
+          Which currency would you like to trade?
+        </label>
+        <select
+          name="from"
+          id="input-currency"
+          defaultValue={params.get("from") ?? currencies[0].id}
+        >
           {currencies.map(({ id, name }) => (
-            <option key={id} value={id}>{name}</option>
+            <option key={id} value={id}>
+              {name}
+            </option>
           ))}
         </select>
-        <label htmlFor="output-currency">Which currency would you like to receive?</label>
-        <select id="output-currency">
+        <label htmlFor="output-currency">
+          Which currency would you like to receive?
+        </label>
+        <select
+          name="to"
+          id="output-currency"
+          defaultValue={params.get("to") ?? currencies[0].id}
+        >
           {currencies.map(({ id, name }) => (
-            <option key={id} value={id}>{name}</option>
+            <option key={id} value={id}>
+              {name}
+            </option>
           ))}
         </select>
+        <button type="submit">Submit</button>
       </Form>
       <Outlet />
     </>
