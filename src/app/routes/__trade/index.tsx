@@ -1,10 +1,10 @@
 import {
-  Form, useSearchParams,
+  Form, useLoaderData, useSearchParams,
 } from "@remix-run/react";
-import { type ActionFunction } from "@remix-run/node";
+import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
 import invariant from "tiny-invariant";
 
-import { createOrder } from "~/app/models/order.server";
+import { createOrder, listOrders, type Order } from "~/app/models/order.server";
 import { listCurrencies } from "~/app/models/currency.server";
 import { Decimal } from "@prisma/client/runtime";
 
@@ -53,19 +53,72 @@ export const action: ActionFunction = async ({ request }) => {
   return null;
 }
 
+export const loader: LoaderFunction = async ({ request }) => {
+  const url = new URL(request.url);
+  const currencyFromId = url.searchParams.get('from') ?? 'usd';
+  const currencyToId = url.searchParams.get('to') ?? 'btc';
+
+  return await listOrders({ currencyFromId, currencyToId });
+}
+
 export default function TradeIndex() {
   const [params] = useSearchParams();
+  const data = useLoaderData<Pick<Order, 'id' | 'price' | 'amount'>[]>();
 
   return (
-    <Form method="post">
-      <input type="hidden" name="currencyFromId" value={params.get('from') ?? 'usd'} />
-      <input type="hidden" name="currencyToId" value={params.get('to') ?? 'btc'} />
+    <>
+      <Form method="post" className="flex flex-col p-2 space-y-2">
+        <input
+          type="hidden"
+          name="currencyFromId"
+          value={params.get("from") ?? "usd"}
+        />
+        <input
+          type="hidden"
+          name="currencyToId"
+          value={params.get("to") ?? "btc"}
+        />
 
-      <label htmlFor="amount">How much?</label>
-      <input type="number" id="amount" name="amount" min="0" />
-      <label htmlFor="price">For what price?</label>
-      <input type="number" id="price" name="price" min="0" />
-      <button type="submit">Submit</button>
-    </Form>
+        <fieldset className="flex flex-col">
+          <legend className="mb-1 block">Buy or sell?</legend>
+          <label>
+            <input type="radio" name="action" value="buy" className="mr-2" />
+            Buy
+          </label>
+          <label>
+            <input type="radio" name="action" value="sell" className="mr-2" />
+            Sell
+          </label>
+        </fieldset>
+        <div>
+          <label htmlFor="amount" className="mr-4">
+            How much?
+          </label>
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            min="0"
+            required
+            className="border border-dark-50"
+          />
+        </div>
+        <div>
+          <label htmlFor="price" className="mr-4">
+            For what price?
+          </label>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            min="0"
+            required
+            className="border border-dark-50"
+          />
+        </div>
+        <button type="submit" className="border border-dark-50 bg-slate-200">Submit</button>
+      </Form>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </>
   );
 }

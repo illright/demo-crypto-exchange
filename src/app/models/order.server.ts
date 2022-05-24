@@ -4,7 +4,7 @@ import { prisma } from "~/app/db.server";
 
 export type { Order } from "@prisma/client";
 
-export function getOrders({
+export function listOrders({
   currencyFromId,
   currencyToId,
 }: Pick<Order, "currencyFromId" | "currencyToId">) {
