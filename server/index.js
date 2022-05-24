@@ -24,20 +24,6 @@ const httpServer = createServer(app);
 // And then attach the socket.io server to the HTTP server
 const io = new Server(httpServer);
 
-// Then you can use `io` to listen the `connection` event and get a socket
-// from a client
-io.on("connection", (socket) => {
-  // from this point you are on the WS connection with a specific client
-  console.log(socket.id, "connected");
-
-  socket.emit("confirmation", "connected!");
-
-  socket.on("event", (data) => {
-    console.log(socket.id, data);
-    socket.emit("event", "pong");
-  });
-});
-
 app.use(compression());
 
 // You may want to be more aggressive with this caching
@@ -50,11 +36,22 @@ app.use(morgan("tiny"));
 app.all(
   "*",
   MODE === "production"
-    ? createRequestHandler({ build: require("./build") })
+    ? createRequestHandler({
+      build: require("./build"),
+      getLoadContext(_req, _res) {
+        return io;
+      }
+    })
     : (req, res, next) => {
         purgeRequireCache();
         const build = require("./build");
-        return createRequestHandler({ build, mode: MODE })(req, res, next);
+        return createRequestHandler({
+          build,
+          mode: MODE,
+          getLoadContext(_req, _res) {
+            return io;
+          },
+        })(req, res, next);
       }
 );
 
