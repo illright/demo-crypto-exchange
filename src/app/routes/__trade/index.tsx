@@ -1,24 +1,25 @@
-import {
-  Form, useLoaderData, useSearchParams,
-} from "@remix-run/react";
+import { useEffect, useState } from "react";
+import { Form, useLoaderData, useSearchParams } from "@remix-run/react";
 import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
 import invariant from "tiny-invariant";
+import type { Server } from "socket.io";
+import { Decimal } from "@prisma/client/runtime";
 
 import { createOrder, listOrders, type Order } from "~/app/models/order.server";
 import { listCurrencies } from "~/app/models/currency.server";
-import { Decimal } from "@prisma/client/runtime";
+import { useSocket } from "~/app/socket-context";
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, context: io }) => {
   const formData = await request.formData();
   const currencies = await listCurrencies();
 
-  const rawAmount = formData.get('amount');
-  invariant(typeof rawAmount === 'string', 'Trade amount has to be a string');
+  const rawAmount = formData.get("amount");
+  invariant(typeof rawAmount === "string", "Trade amount has to be a string");
   const amount = new Decimal(rawAmount);
   invariant(!amount.isNaN(), "The amount has to be a decimal number");
   invariant(amount.gt(0), "The amount has to be positive");
 
-  const rawPrice = formData.get('price');
+  const rawPrice = formData.get("price");
   invariant(typeof rawPrice === "string", "Trade price has to be a string");
   const price = new Decimal(rawPrice);
   invariant(!price.isNaN(), "The price has to be a decimal number");
@@ -44,26 +45,61 @@ export const action: ActionFunction = async ({ request }) => {
     "Target currency ID should be valid"
   );
 
+  const action = formData.get("action");
+  invariant(
+    action === "buy" || action === "sell",
+    "Action should be either 'buy' or 'sell'"
+  );
+
   await createOrder({
     amount,
     price,
     currencyFromId,
     currencyToId,
+    type: action,
   });
+
+  (io as Server).emit(
+    `refresh:${currencyFromId}:${currencyToId}`,
+    await listOrders({ currencyFromId, currencyToId })
+  );
   return null;
-}
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
-  const currencyFromId = url.searchParams.get('from') ?? 'usd';
-  const currencyToId = url.searchParams.get('to') ?? 'btc';
+  const currencyFromId = url.searchParams.get("from") ?? "usd";
+  const currencyToId = url.searchParams.get("to") ?? "btc";
 
   return await listOrders({ currencyFromId, currencyToId });
+};
+
+interface OrderBookProps {
+  currencyFromId: string;
+  currencyToId: string;
+  data: OrderSelected[];
+}
+
+type OrderSelected = Pick<Order, "id" | "price" | "amount">;
+
+function OrderBook({ currencyFromId, currencyToId, data }: OrderBookProps) {
+  const socket = useSocket();
+  const [orders, setOrders] = useState<OrderSelected[]>(data);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on(`refresh:${currencyFromId}:${currencyToId}`, (data) => {
+      setOrders(data);
+    });
+  }, [socket, currencyFromId, currencyToId]);
+
+  return <pre>{JSON.stringify(orders, null, 2)}</pre>;
 }
 
 export default function TradeIndex() {
   const [params] = useSearchParams();
-  const data = useLoaderData<Pick<Order, 'id' | 'price' | 'amount'>[]>();
+  const data = useLoaderData<OrderSelected[]>()
 
   return (
     <>
@@ -116,9 +152,15 @@ export default function TradeIndex() {
             className="border border-dark-50"
           />
         </div>
-        <button type="submit" className="border border-dark-50 bg-slate-200">Submit</button>
+        <button type="submit" className="border border-dark-50 bg-slate-200">
+          Submit
+        </button>
       </Form>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <OrderBook
+        data={data}
+        currencyFromId={params.get("from") ?? "usd"}
+        currencyToId={params.get("to") ?? "btc"}
+      />
     </>
   );
 }
