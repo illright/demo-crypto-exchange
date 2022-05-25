@@ -1,5 +1,5 @@
 import { prisma } from "~/app/db.server";
 
-export function listCurrencies() {
-  return prisma.currency.findMany();
+export function listCurrencies(limit?: number) {
+  return prisma.currency.findMany({ take: limit });
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Form, useLoaderData, useSearchParams } from "@remix-run/react";
-import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
+import { redirect, type LoaderFunction, type ActionFunction } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import type { Server } from "socket.io";
 import { Decimal } from "@prisma/client/runtime";
@@ -68,8 +68,20 @@ export const action: ActionFunction = async ({ request, context: io }) => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
-  const currencyFromId = url.searchParams.get("from") ?? "usd";
-  const currencyToId = url.searchParams.get("to") ?? "btc";
+
+  if (!url.searchParams.has('from') || !url.searchParams.has('to')) {
+    const [from, to] = await listCurrencies(2);
+    if (from !== undefined && to !== undefined) {
+      url.searchParams.set('from', from.id);
+      url.searchParams.set('to', to.id);
+      return redirect(url.toString());
+    } else {
+      throw new Error('There are not enough currencies in the database :/');
+    }
+  }
+
+  const currencyFromId = url.searchParams.get("from")!;
+  const currencyToId = url.searchParams.get("to")!;
 
   return await listOrders({ currencyFromId, currencyToId });
 };
