@@ -6,7 +6,8 @@ import {
   useSearchParams,
   useSubmit,
 } from "@remix-run/react";
-import { type LoaderFunction, json } from "@remix-run/node";
+import { type LoaderFunction } from "@remix-run/node";
+import { listCurrencies } from "~/entities/currency";
 
 export interface Currency {
   id: string;
@@ -14,10 +15,7 @@ export interface Currency {
 }
 
 export const loader: LoaderFunction = async () => {
-  return json<Currency[]>([
-    { id: "usd", name: "US Dollar (USD)" },
-    { id: "btc", name: "Bitcoin (BTC)" },
-  ]);
+  return await listCurrencies();
 };
 
 export default function TradePage() {
@@ -43,7 +41,7 @@ export default function TradePage() {
         >
           {currencies.map(({ id, name }) => (
             <option key={id} value={id}>
-              {name}
+              {name} ({id.toUpperCase()})
             </option>
           ))}
         </select>
@@ -57,7 +55,7 @@ export default function TradePage() {
         >
           {currencies.map(({ id, name }) => (
             <option key={id} value={id}>
-              {name}
+              {name} ({id.toUpperCase()})
             </option>
           ))}
         </select>

@@ -119,12 +119,12 @@ export default function TradeIndex() {
         <input
           type="hidden"
           name="currencyFromId"
-          value={params.get("from") ?? "usd"}
+          value={params.get("from")!}
         />
         <input
           type="hidden"
           name="currencyToId"
-          value={params.get("to") ?? "btc"}
+          value={params.get("to")!}
         />
 
         <fieldset className="flex flex-col">
@@ -170,8 +170,8 @@ export default function TradeIndex() {
       </Form>
       <OrderBook
         data={data}
-        currencyFromId={params.get("from") ?? "usd"}
-        currencyToId={params.get("to") ?? "btc"}
+        currencyFromId={params.get("from")!}
+        currencyToId={params.get("to")!}
       />
     </>
   );
