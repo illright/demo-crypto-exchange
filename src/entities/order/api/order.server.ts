@@ -3,8 +3,6 @@ import { Decimal } from "@prisma/client/runtime";
 
 import { prisma } from "~/app/db.server";
 
-export type { Order } from "@prisma/client";
-
 export function listOrders({
   currencyFromId,
   currencyToId,
