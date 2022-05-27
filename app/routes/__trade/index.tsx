@@ -7,7 +7,7 @@ import { Decimal } from "@prisma/client/runtime";
 
 import { createOrder, listOrders, type Order } from "~/entities/order";
 import { listCurrencies } from "~/entities/currency";
-import { useSocket } from "~/app/socket-context";
+import { useSocket } from "app/socket-context";
 
 export const action: ActionFunction = async ({ request, context: io }) => {
   const formData = await request.formData();

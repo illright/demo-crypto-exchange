@@ -1,7 +1,7 @@
 import type { Order } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime";
 
-import { prisma } from "~/app/db.server";
+import { prisma } from "~/db.server";
 
 export function listOrders({
   currencyFromId,
