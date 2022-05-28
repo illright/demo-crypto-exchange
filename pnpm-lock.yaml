@@ -4,6 +4,7 @@ specifiers:
   '@babel/core': ^7.18.0
   '@babel/preset-env': ^7.18.0
   '@faker-js/faker': ^6.3.1
+  '@headlessui/react': ^1.6.3
   '@prisma/client': ^3.14.0
   '@remix-run/dev': ^1.5.1
   '@remix-run/eslint-config': ^1.5.1
@@ -26,12 +27,14 @@ specifiers:
   bcryptjs: ^2.4.3
   binode: ^1.0.5
   c8: ^7.11.3
+  clsx: ^1.1.1
   compression: ^1.7.4
   cross-env: ^7.0.3
   cypress: ^9.6.1
   eslint: ^8.16.0
   eslint-config-prettier: ^8.5.0
   express: ^4.17.3
+  fuse.js: ^6.6.2
   happy-dom: ^3.2.2
   morgan: ^1.10.0
   msw: ^0.40.2
@@ -42,6 +45,7 @@ specifiers:
   prisma: ^3.14.0
   react: ^18.1.0
   react-dom: ^18.1.0
+  react-icons: ^4.3.1
   socket.io: ^4.4.1
   socket.io-client: ^4.4.1
   start-server-and-test: ^1.14.0
@@ -55,18 +59,22 @@ specifiers:
   vitest: ^0.12.8
 
 dependencies:
+  '@headlessui/react': 1.6.3_ef5jwxihqo6n7gxfmzogljlgcm
   '@prisma/client': 3.14.0_prisma@3.14.0
   '@remix-run/express': 1.5.1_uylvv7bgf3i235clkffsyjrkfm
   '@remix-run/node': 1.5.1_ef5jwxihqo6n7gxfmzogljlgcm
   '@remix-run/react': 1.5.1_ef5jwxihqo6n7gxfmzogljlgcm
   '@remix-run/server-runtime': 1.5.1_ef5jwxihqo6n7gxfmzogljlgcm
   bcryptjs: 2.4.3
+  clsx: 1.1.1
   compression: 1.7.4
   cross-env: 7.0.3
   express: 4.18.1
+  fuse.js: 6.6.2
   morgan: 1.10.0
   react: 18.1.0
   react-dom: 18.1.0_react@18.1.0
+  react-icons: 4.3.1_react@18.1.0
   socket.io: 4.5.1
   socket.io-client: 4.5.1
   tiny-invariant: 1.2.0
@@ -1657,6 +1665,17 @@ packages:
     dependencies:
       '@hapi/hoek': 9.3.0
     dev: true
+
+  /@headlessui/react/1.6.3_ef5jwxihqo6n7gxfmzogljlgcm:
+    resolution: {integrity: sha512-WNu/ypGzl0JmJ+sD34KtdycEu2n7EZjKFx2rq6fivsszPdoEyOVZ/GYQMJ437dfAJI0/ZxoRYfrOVduZHjlokQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16 || ^17 || ^18
+      react-dom: ^16 || ^17 || ^18
+    dependencies:
+      react: 18.1.0
+      react-dom: 18.1.0_react@18.1.0
+    dev: false
 
   /@humanwhocodes/config-array/0.9.5:
     resolution: {integrity: sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw==}
@@ -3376,6 +3395,11 @@ packages:
     resolution: {integrity: sha1-2jCcwmPfFZlMaIypAheco8fNfH4=}
     engines: {node: '>=0.8'}
     dev: true
+
+  /clsx/1.1.1:
+    resolution: {integrity: sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==}
+    engines: {node: '>=6'}
+    dev: false
 
   /collection-visit/1.0.0:
     resolution: {integrity: sha1-S8A3PBZLwykbTTaMgpzxqApZ3KA=}
@@ -5440,6 +5464,11 @@ packages:
 
   /functions-have-names/1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
+
+  /fuse.js/6.6.2:
+    resolution: {integrity: sha512-cJaJkxCCxC8qIIcPBF9yGxY0W/tVZS3uEISDxhYIdtk8OL93pe+6Zj7LjCqVV4dzbqcriOZ+kQ/NE4RXZHsIGA==}
+    engines: {node: '>=10'}
+    dev: false
 
   /gensync/1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
@@ -8126,6 +8155,14 @@ packages:
       loose-envify: 1.4.0
       react: 18.1.0
       scheduler: 0.22.0
+
+  /react-icons/4.3.1_react@18.1.0:
+    resolution: {integrity: sha512-cB10MXLTs3gVuXimblAdI71jrJx8njrJZmNMEMC+sQu5B/BIOmlsAjskdqpn81y8UBVEGuHODd7/ci5DvoSzTQ==}
+    peerDependencies:
+      react: '*'
+    dependencies:
+      react: 18.1.0
+    dev: false
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}

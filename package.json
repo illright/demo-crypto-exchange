@@ -31,18 +31,22 @@
     "/public/build"
   ],
   "dependencies": {
+    "@headlessui/react": "^1.6.3",
     "@prisma/client": "^3.14.0",
     "@remix-run/express": "^1.5.1",
     "@remix-run/node": "^1.5.1",
     "@remix-run/react": "^1.5.1",
     "@remix-run/server-runtime": "^1.5.1",
     "bcryptjs": "^2.4.3",
+    "clsx": "^1.1.1",
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",
     "express": "^4.17.3",
+    "fuse.js": "^6.6.2",
     "morgan": "^1.10.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-icons": "^4.3.1",
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.4.1",
     "tiny-invariant": "^1.2.0"
