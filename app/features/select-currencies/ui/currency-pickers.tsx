@@ -1,5 +1,10 @@
 import { type RefObject, useEffect, useRef, useState } from "react";
-import { Form, useSearchParams, useSubmit } from "@remix-run/react";
+import {
+  Form,
+  useSearchParams,
+  useSubmit,
+  useTransition,
+} from "@remix-run/react";
 
 import { CurrencyPicker, type Currency } from "~/entities/currency";
 import type { OrderType } from "~/entities/order";
@@ -7,7 +12,7 @@ import { Button } from "~/shared/ui";
 
 export interface CurrencyPickersProps {
   options: Currency[];
-  orderType: OrderType
+  orderType: OrderType;
 }
 
 function useStateWithSubmitOnChange(
@@ -33,6 +38,7 @@ function useStateWithSubmitOnChange(
  */
 export function CurrencyPickers(props: CurrencyPickersProps) {
   const formElement = useRef<HTMLFormElement>(null);
+  const transition = useTransition();
 
   const [params] = useSearchParams();
   const [sourceCurrency, setSourceCurrency] = useStateWithSubmitOnChange(
@@ -45,12 +51,8 @@ export function CurrencyPickers(props: CurrencyPickersProps) {
   );
 
   return (
-    <Form
-      method="get"
-      ref={formElement}
-      reloadDocument
-      className="flex flex-col"
-    >
+    <Form method="get" ref={formElement} className="flex flex-col">
+      <input type="hidden" name="action" value={props.orderType} />
       <CurrencyPicker
         name="from"
         label={
@@ -62,6 +64,7 @@ export function CurrencyPickers(props: CurrencyPickersProps) {
             : "I want to sell this currency..."
         }
         options={props.options}
+        disabled={transition.state === "submitting"}
         value={sourceCurrency}
         onChange={setSourceCurrency}
       />
@@ -76,11 +79,14 @@ export function CurrencyPickers(props: CurrencyPickersProps) {
             : "...to get this currency"
         }
         options={props.options}
+        disabled={transition.state === "submitting"}
         value={targetCurrency}
         onChange={setTargetCurrency}
       />
       <Button type="submit" className="mt-2">
-        Select
+        {transition.state === "submitting"
+          ? "Opening the order page..."
+          : "Select"}
       </Button>
     </Form>
   );

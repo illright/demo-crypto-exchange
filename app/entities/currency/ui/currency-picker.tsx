@@ -12,6 +12,7 @@ export interface CurrencyPickerProps {
   label: string;
   description: string;
   options: Currency[];
+  disabled?: boolean;
   value: Currency["id"];
   onChange: (newCurrencyID: Currency["id"]) => void;
 }
@@ -40,7 +41,12 @@ export function CurrencyPicker(props: CurrencyPickerProps) {
       : fusedOptions.search(query).map((result) => result.item);
 
   return (
-    <Combobox value={props.value} onChange={props.onChange} name={props.name}>
+    <Combobox
+      value={props.value}
+      onChange={props.onChange}
+      name={props.name}
+      disabled={props.disabled ?? false}
+    >
       <div className="flex justify-between items-baseline px-3 py-1">
         <Combobox.Label className="font-medium mt-3">
           {props.label}
