@@ -3,6 +3,7 @@ import { Form, useSearchParams, useSubmit } from "@remix-run/react";
 
 import { CurrencyPicker, type Currency } from "~/entities/currency";
 import type { OrderType } from "~/entities/order";
+import { Button } from "~/shared/ui";
 
 export interface CurrencyPickersProps {
   options: Currency[];
@@ -48,7 +49,7 @@ export function CurrencyPickers(props: CurrencyPickersProps) {
       method="get"
       ref={formElement}
       reloadDocument
-      className="flex flex-col items-start"
+      className="flex flex-col"
     >
       <CurrencyPicker
         name="from"
@@ -78,7 +79,9 @@ export function CurrencyPickers(props: CurrencyPickersProps) {
         value={targetCurrency}
         onChange={setTargetCurrency}
       />
-      <button type="submit">Submit</button>
+      <Button type="submit" className="mt-2">
+        Select
+      </Button>
     </Form>
   );
 }
