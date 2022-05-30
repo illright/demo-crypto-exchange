@@ -1,7 +1,7 @@
 import type { Currency } from "../type";
 
 /** Construct a human-readable name for a currency. */
-export function displayName(currency: Currency | undefined) {
+export function currencyDisplayName(currency: Currency | undefined) {
   if (currency === undefined) {
     return "Unknown (???)";
   }

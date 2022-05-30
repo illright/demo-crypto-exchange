@@ -2,8 +2,7 @@ import clsx from "clsx";
 import { Combobox } from "@headlessui/react";
 import { HiCheck } from "react-icons/hi";
 
-import { displayName } from "./currency-display-name";
-import type { Currency } from "../type";
+import { currencyDisplayName, type Currency } from "~/entities/currency";
 
 /** Query the Iconify API for the icons from the Cryptocurrency pack. */
 function iconForCurrency(currencyID: string) {
@@ -43,7 +42,7 @@ export function CurrencyPickerOption({ value }: { value: Currency }) {
               selected ? "font-medium" : "font-normal"
             )}
           >
-            {displayName(value)}
+            {currencyDisplayName(value)}
           </span>
           <img className="col-start-3" src={iconForCurrency(value.id)} alt="" />
         </>

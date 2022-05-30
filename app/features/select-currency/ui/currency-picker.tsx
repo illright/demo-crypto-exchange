@@ -3,9 +3,8 @@ import { Fragment, useId, useMemo, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { HiSelector } from "react-icons/hi";
 
-import { displayName } from "./currency-display-name";
+import { currencyDisplayName, type Currency } from "~/entities/currency";
 import { CurrencyPickerOption } from "./currency-picker-option";
-import type { Currency } from "../type";
 
 export interface CurrencyPickerProps {
   name?: string;
@@ -70,7 +69,9 @@ export function CurrencyPicker(props: CurrencyPickerProps) {
             aria-describedby={descriptionId}
             className="flex-1 border-none py-2 px-3 text-gray-900 focus:outline-none"
             displayValue={(id) =>
-              displayName(props.options.find((option) => option.id === id))
+              currencyDisplayName(
+                props.options.find((option) => option.id === id)
+              )
             }
             onChange={(event) => setQuery(event.target.value)}
           />
