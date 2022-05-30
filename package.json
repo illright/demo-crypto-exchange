@@ -13,7 +13,7 @@
     "dev:remix": "remix watch",
     "dev:server": "cross-env NODE_ENV=development node server/index.js",
     "format": "prettier --write .",
-    "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
+    "generate:css": "tailwindcss -o ./app/tailwind.css",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "setup": "prisma migrate dev && prisma db seed",
     "start": "cross-env NODE_ENV=production node server/index.js",

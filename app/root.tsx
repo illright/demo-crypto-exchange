@@ -14,7 +14,7 @@ import {
 import type { Socket } from "socket.io-client";
 import io from "socket.io-client";
 
-import tailwindStylesheetUrl from "./styles/tailwind.css";
+import tailwindStylesheetUrl from "./tailwind.css";
 import { SocketProvider } from "./socket-context";
 
 export const links: LinksFunction = () => {

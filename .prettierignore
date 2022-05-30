@@ -4,5 +4,5 @@ node_modules
 /public/build
 .env
 
-/app/styles/tailwind.css
+/app/tailwind.css
 pnpm-lock.yaml
