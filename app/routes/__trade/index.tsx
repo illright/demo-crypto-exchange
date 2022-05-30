@@ -5,9 +5,12 @@ import invariant from "tiny-invariant";
 import type { Server } from "socket.io";
 import { Decimal } from "@prisma/client/runtime";
 
-import { OrderTypeTabs, type OrderType } from "~/features/select-order-type";
-import { createOrder, listOrders, type Order } from "~/entities/order";
 import { listCurrencies } from "~/entities/currency";
+import {
+  createOrder,
+  listOrders,
+  type Order,
+} from "~/entities/order";
 import { useSocket } from "app/socket-context";
 
 export const action: ActionFunction = async ({ request, context: io }) => {
@@ -114,8 +117,6 @@ export default function TradeIndex() {
   const [params] = useSearchParams();
   const data = useLoaderData<OrderSelected[]>()
 
-  const [orderType, setOrderType] = useState<OrderType>('buy');
-
   return (
     <>
       <Form method="post" className="flex flex-col p-2 space-y-2">
@@ -124,20 +125,8 @@ export default function TradeIndex() {
           name="currencyFromId"
           value={params.get("from")!}
         />
-        <input
-          type="hidden"
-          name="currencyToId"
-          value={params.get("to")!}
-        />
-        <input
-          type="hidden"
-          name="action"
-          value={orderType}
-        />
-
-        <OrderTypeTabs value={orderType} onChange={setOrderType}>
-          {['one', 'two']}
-        </OrderTypeTabs>
+        <input type="hidden" name="currencyToId" value={params.get("to")!} />
+        <input type="hidden" name="action" value="buy" />
         <div>
           <label htmlFor="amount" className="mr-4">
             How much?

@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { Tab } from "@headlessui/react";
 import type { ReactNode } from "react";
 
-export type OrderType = "buy" | "sell";
+import type { OrderType } from '~/entities/order'
 
 export interface OrderTypeTabsProps {
   children: [ReactNode, ReactNode];

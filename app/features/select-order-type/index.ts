@@ -1,1 +1,1 @@
-export { OrderTypeTabs, type OrderType } from './ui/order-type-tabs';
+export { OrderTypeTabs } from './ui/order-type-tabs';
