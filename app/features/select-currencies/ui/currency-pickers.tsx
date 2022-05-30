@@ -1,9 +1,12 @@
 import { type RefObject, useEffect, useRef, useState } from "react";
 import { Form, useSearchParams, useSubmit } from "@remix-run/react";
+
 import { CurrencyPicker, type Currency } from "~/entities/currency";
+import type { OrderType } from "~/entities/order";
 
 export interface CurrencyPickersProps {
   options: Currency[];
+  orderType: OrderType
 }
 
 function useStateWithSubmitOnChange(
@@ -47,17 +50,30 @@ export function CurrencyPickers(props: CurrencyPickersProps) {
       reloadDocument
       className="flex flex-col items-start"
     >
-      <label htmlFor="input-currency">From</label>
       <CurrencyPicker
         name="from"
+        label={
+          props.orderType === "buy" ? "Desired currency" : "Owned currency"
+        }
+        description={
+          props.orderType === "buy"
+            ? "I want to buy this currency..."
+            : "I want to sell this currency..."
+        }
         options={props.options}
         value={sourceCurrency}
         onChange={setSourceCurrency}
       />
-      <label htmlFor="output-currency">To</label>
       <CurrencyPicker
         name="to"
-        id="output-currency"
+        label={
+          props.orderType === "buy" ? "Owned currency" : "Desired currency"
+        }
+        description={
+          props.orderType === "buy"
+            ? "...by paying with this currency"
+            : "...to get this currency"
+        }
         options={props.options}
         value={targetCurrency}
         onChange={setTargetCurrency}

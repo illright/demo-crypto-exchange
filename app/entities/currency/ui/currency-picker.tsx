@@ -1,5 +1,5 @@
 import Fuse from "fuse.js";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useId, useMemo, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { HiSelector } from "react-icons/hi";
 
@@ -9,7 +9,8 @@ import type { Currency } from "../type";
 
 export interface CurrencyPickerProps {
   name?: string;
-  id?: string;
+  label: string;
+  description: string;
   options: Currency[];
   value: Currency["id"];
   onChange: (newCurrencyID: Currency["id"]) => void;
@@ -26,6 +27,8 @@ function EmptyState() {
 /** Picker for currencies with fuzzy search on names and IDs. */
 export function CurrencyPicker(props: CurrencyPickerProps) {
   const [query, setQuery] = useState("");
+  const id = useId();
+  const descriptionId = `${id}-description`;
   const fusedOptions = useMemo(
     () => new Fuse(props.options, { keys: ["id", "name"] }),
     [props.options]
@@ -38,6 +41,14 @@ export function CurrencyPicker(props: CurrencyPickerProps) {
 
   return (
     <Combobox value={props.value} onChange={props.onChange} name={props.name}>
+      <div className="flex justify-between items-baseline px-3 py-1">
+        <Combobox.Label className="font-medium mt-3">
+          {props.label}
+        </Combobox.Label>
+        <span id={descriptionId} className="text-sm text-gray-500 italic">
+          {props.description}
+        </span>
+      </div>
       <div className="relative min-w-52">
         <div
           className="
@@ -50,13 +61,17 @@ export function CurrencyPicker(props: CurrencyPickerProps) {
           "
         >
           <Combobox.Input
+            aria-describedby={descriptionId}
             className="flex-1 border-none py-2 px-3 text-gray-900 focus:outline-none"
             displayValue={(id) =>
               displayName(props.options.find((option) => option.id === id))
             }
             onChange={(event) => setQuery(event.target.value)}
           />
-          <Combobox.Button className="flex items-center px-2">
+          <Combobox.Button
+            aria-describedby={descriptionId}
+            className="flex items-center px-2"
+          >
             <HiSelector className="h-5 w-5 text-gray-400" aria-hidden="true" />
           </Combobox.Button>
         </div>
