@@ -1,13 +1,19 @@
 // import { useLoaderData } from "@remix-run/react";
-import { type LoaderFunction } from "@remix-run/node";
+import { redirect, type LoaderFunction } from "@remix-run/node";
 
 import { selectArbitraryCurrencies } from "~/features/select-currency";
+import { isMobileDevice } from "~/shared/lib";
 
 interface SellPageData {
   // orderBook: Awaited<ReturnType<typeof getOrderBook>>;
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const userAgent = request.headers.get("User-Agent");
+  if (userAgent !== null && isMobileDevice(userAgent) === false) {
+    return redirect("/trade");
+  }
+
   const url = new URL(request.url);
 
   const what = url.searchParams.get("what");
@@ -21,6 +27,12 @@ export const loader: LoaderFunction = async ({ request }) => {
   } as SellPageData;
 };
 
+/**
+ * Select the amount of currency to sell and at what price. Examine the order book.
+ *
+ * This page is solely intended for mobile devices. On tablets and desktops,
+ * the `/trade` page offers this functionality.
+ */
 export default function SellPage() {
   // const { } = useLoaderData<SellPageData>();
   return (

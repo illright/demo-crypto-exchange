@@ -41,6 +41,7 @@
     "clsx": "^1.1.1",
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",
+    "device-detector-js": "^3.0.3",
     "express": "^4.17.3",
     "fuse.js": "^6.6.2",
     "morgan": "^1.10.0",
