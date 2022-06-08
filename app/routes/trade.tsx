@@ -20,22 +20,30 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   const url = new URL(request.url);
+  let urlChanged = false;
 
   const what = url.searchParams.get("what");
   const price = url.searchParams.get("price");
   const action = url.searchParams.get("action");
 
   if (what === null || price === null) {
-    return selectArbitraryCurrencies(url);
-  } else if (action === null) {
-    return selectArbitraryOrderType(url);
+    urlChanged = true;
+    await selectArbitraryCurrencies(url.searchParams);
+  }
+  if (action === null) {
+    urlChanged = true;
+    selectArbitraryOrderType(url.searchParams);
   }
 
-  return {
-    currencies: await listCurrencies(),
-    // priceHistory: await listPriceHistoryPoints(what),
-    // orderBook: await getOrderBook(what, price),
-  } as TradePageData;
+  if (urlChanged) {
+    return redirect(url.toString());
+  } else {
+    return {
+      currencies: await listCurrencies(),
+      // priceHistory: await listPriceHistoryPoints(what),
+      // orderBook: await getOrderBook(what, price),
+    } as TradePageData;
+  }
 };
 
 /**

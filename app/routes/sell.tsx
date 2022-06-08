@@ -19,7 +19,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   const what = url.searchParams.get("what");
   const price = url.searchParams.get("price");
   if (what === null || price === null) {
-    return selectArbitraryCurrencies(url);
+    await selectArbitraryCurrencies(url.searchParams);
+    return redirect(url.toString());
   }
 
   return {
