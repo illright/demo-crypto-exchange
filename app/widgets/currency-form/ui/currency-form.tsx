@@ -23,11 +23,11 @@ export function CurrencyForm(props: CurrencyFormProps) {
     formElement
   );
   const [sourceCurrency, setSourceCurrency] = useStateWithSubmitOnChange(
-    params.get("from") ?? props.options[0].id,
+    params.get("price") ?? props.options[0].id,
     formElement
   );
   const [targetCurrency, setTargetCurrency] = useStateWithSubmitOnChange(
-    params.get("to") ?? props.options[1].id,
+    params.get("what") ?? props.options[1].id,
     formElement
   );
 
@@ -44,7 +44,7 @@ export function CurrencyForm(props: CurrencyFormProps) {
           >
             <input type="hidden" name="action" value={orderType} />
             <CurrencyPicker
-              name="from"
+              name="price"
               label={
                 orderType === "buy" ? "Desired currency" : "Owned currency"
               }
@@ -59,7 +59,7 @@ export function CurrencyForm(props: CurrencyFormProps) {
               onChange={setSourceCurrency}
             />
             <CurrencyPicker
-              name="to"
+              name="what"
               label={
                 orderType === "buy" ? "Owned currency" : "Desired currency"
               }
