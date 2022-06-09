@@ -2,6 +2,7 @@ import { useLoaderData } from "@remix-run/react";
 import { redirect, type LoaderFunction } from "@remix-run/node";
 
 import { CurrencyForm } from "~/widgets/currency-form";
+import { OrderBook, getOrderBook } from "~/features/order-book";
 import { selectArbitraryCurrencies } from "~/features/select-currency";
 import { selectArbitraryOrderType } from "~/features/select-order-type";
 import { listCurrencies } from "~/entities/currency";
@@ -10,7 +11,7 @@ import { isMobileDevice } from "~/shared/lib";
 interface TradePageData {
   currencies: Awaited<ReturnType<typeof listCurrencies>>;
   // priceHistory: Awaited<ReturnType<typeof listPriceHistoryPoints>>;
-  // orderBook: Awaited<ReturnType<typeof getOrderBook>>;
+  orderBook: Awaited<ReturnType<typeof getOrderBook>>;
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -41,7 +42,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     return {
       currencies: await listCurrencies(),
       // priceHistory: await listPriceHistoryPoints(what),
-      // orderBook: await getOrderBook(what, price),
+      orderBook: await getOrderBook({ currencyToId: what!, currencyFromId: price! }),
     } as TradePageData;
   }
 };
@@ -54,14 +55,14 @@ export const loader: LoaderFunction = async ({ request }) => {
  * this functionality is split between the `/`, `/buy` and `/sell` pages.
  */
 export default function TradePage() {
-  const { currencies } = useLoaderData<TradePageData>();
+  const { currencies, orderBook } = useLoaderData<TradePageData>();
 
   return (
     <div>
       <CurrencyForm options={currencies} />
       {/* <PriceGraph /> */}
       {/* <OrderForm /> */}
-      {/* <OrderBook /> */}
+      <OrderBook items={orderBook} />
     </div>
   );
 }

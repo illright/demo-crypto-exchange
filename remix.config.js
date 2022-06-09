@@ -6,4 +6,5 @@ module.exports = {
   devServerPort: 8002,
   ignoredRouteFiles: ["**/.*", "**/*.css", "**/*.test.{js,jsx,ts,tsx}"],
   serverBuildDirectory: "./server/build",
+  serverDependenciesToBundle: ["plur"],
 };

@@ -13,6 +13,8 @@ import {
 } from "@remix-run/react";
 import type { Socket } from "socket.io-client";
 import io from "socket.io-client";
+import { SSRProvider } from "@react-aria/ssr";
+
 
 import tailwindStylesheetUrl from "./tailwind.css";
 import { SocketProvider } from "./socket-context";
@@ -45,9 +47,11 @@ export default function App() {
         <Links />
       </head>
       <body className="h-full">
-        <SocketProvider socket={socket}>
-          <Outlet />
-        </SocketProvider>
+        <SSRProvider>
+          <SocketProvider socket={socket}>
+            <Outlet />
+          </SocketProvider>
+        </SSRProvider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
