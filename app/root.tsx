@@ -1,8 +1,4 @@
-import { useEffect, useState } from "react";
-import type {
-  LinksFunction,
-  MetaFunction,
-} from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -11,13 +7,11 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import type { Socket } from "socket.io-client";
-import io from "socket.io-client";
 import { SSRProvider } from "@react-aria/ssr";
 
+import { useAutoClosingSocket, SocketProvider } from "~/shared/api";
 
 import tailwindStylesheetUrl from "./tailwind.css";
-import { SocketProvider } from "./socket-context";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwindStylesheetUrl }];
@@ -30,15 +24,7 @@ export const meta: MetaFunction = () => ({
 });
 
 export default function App() {
-  const [socket, setSocket] = useState<Socket>();
-
-  useEffect(() => {
-    const socket = io();
-    setSocket(socket);
-    return () => {
-      socket.close();
-    };
-  }, []);
+  const socket = useAutoClosingSocket();
 
   return (
     <html lang="en" className="h-full">
@@ -48,7 +34,7 @@ export default function App() {
       </head>
       <body className="h-full">
         <SSRProvider>
-          <SocketProvider socket={socket}>
+          <SocketProvider value={socket}>
             <Outlet />
           </SocketProvider>
         </SSRProvider>
