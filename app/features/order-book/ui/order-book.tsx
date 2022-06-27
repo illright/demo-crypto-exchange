@@ -34,7 +34,7 @@ export function OrderBook(props: OrderBookProps) {
   );
 
   return (
-    <>
+    <div>
       <div className="font-semibold mb-1 mt-2 px-3" {...labelProps}>
         {listBoxOptions.label}
       </div>
@@ -49,6 +49,6 @@ export function OrderBook(props: OrderBookProps) {
           ))}
         </MaxAmountContext.Provider>
       </ul>
-    </>
+    </div>
   );
 }

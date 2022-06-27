@@ -58,7 +58,7 @@ export default function TradePage() {
   const { currencies, orderBook } = useLoaderData<TradePageData>();
 
   return (
-    <div>
+    <div className="grid grid-cols-2">
       <CurrencyForm options={currencies} />
       {/* <PriceGraph /> */}
       {/* <OrderForm /> */}
